@@ -1,0 +1,43 @@
+server:
+  port: 4001
+
+spring:
+  application:
+    name: bank
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bank
+    username: postgres
+    password: root
+    initialization-mode: always
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  liquibase:
+    enabled: true
+    change-log: classpath:/database/project-changelogs.xml
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: short.cutty21@gmail.com
+    password: ShortCutty2021
+    debug: true
+    transport:
+      protocol: smtp
+    smtp:
+      auth: true
+      starttls:
+        enable: true
+    properties.mail.smpt:
+      starttls:
+        enable: true
+        required: true
+      auth: true
+
+jwt:
+  header: Autherization
+  secret: lviv
+  expiration: 600000
