@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.Objects;
 
 @Getter
@@ -12,7 +14,11 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationRequest {
+    @NotBlank(message = "numberCard can not be empty!")
+    @Pattern(regexp = "^([0-9]{16})$",
+            message = "Wrong pattern for email!")
     private String numberCard;
+    @NotBlank(message = "Password can not be empty!")
     private String password;
 
     @Override

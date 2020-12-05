@@ -1,14 +1,13 @@
 package com.bank.model;
 
+import com.bank.model.enums.Role;
+import com.bank.model.enums.TypeTransaction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -21,9 +20,14 @@ public class CardTransaction extends AbstractEntity{
 
     @Column(name = "current_balance")
     private Double currentBalance;
-    @Column(name = "withdrawn_cash")
-    private Double withdrawCash;
-    @ManyToOne
+    @Column(name = "money")
+    private Double money;
+    @Column(name = "type_transaction")
+    @Enumerated(value = EnumType.STRING)
+    private TypeTransaction typeTransaction;
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = CascadeType.DETACH)
+    @JoinColumn(name = "card_id")
     private Card card;
 
     @Override
@@ -33,20 +37,22 @@ public class CardTransaction extends AbstractEntity{
         if (!super.equals(o)) return false;
         CardTransaction that = (CardTransaction) o;
         return Objects.equals(currentBalance, that.currentBalance)
-                && Objects.equals(withdrawCash, that.withdrawCash)
+                && Objects.equals(money, that.money)
+                && typeTransaction == that.typeTransaction
                 && Objects.equals(card, that.card);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), currentBalance, withdrawCash, card);
+        return Objects.hash(super.hashCode(), currentBalance, money, typeTransaction, card);
     }
 
     @Override
     public String toString() {
-        return "Transaction{" +
+        return "CardTransaction{" +
                 "currentBalance=" + currentBalance +
-                ", withdrawCash=" + withdrawCash +
+                ", money=" + money +
+                ", typeTransaction=" + typeTransaction +
                 ", card=" + card +
                 '}';
     }

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.Objects;
 
 @Getter
@@ -12,51 +14,15 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CardRequest {
+
+    @NotBlank(message = "numberCard can not be empty!")
+    @Pattern(regexp = "^([0-9]{16})$",
+            message = "Wrong pattern for email!")
     private String numberCard;
     private String firstName;
     private String secondName;
     private String password;
     private String email;
-
-    public String getNumberCard() {
-        return numberCard;
-    }
-
-    public void setNumberCard(String numberCard) {
-        this.numberCard = numberCard;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getSecondName() {
-        return secondName;
-    }
-
-    public void setSecondName(String secondName) {
-        this.secondName = secondName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     @Override
     public boolean equals(Object o) {

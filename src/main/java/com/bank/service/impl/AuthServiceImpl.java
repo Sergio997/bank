@@ -71,6 +71,7 @@ public class AuthServiceImpl implements AuthService {
             Card newCard = cardMapper.requestToEntity(request);
             newCard.setRole(Role.USER);
             newCard.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
+            newCard.setBalance(0.0);
             String token = tokenProvider.createToken(newCard.getNumberCard(), newCard.getRole().name());
             Card savedCard = cardRepo.save(newCard);
             createVerificationToken(savedCard, token);

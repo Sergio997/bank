@@ -1,25 +1,35 @@
 package com.bank.service.impl;
 
 import com.bank.dto.response.CardResponse;
+import com.bank.dto.response.CardTransactionResponse;
+import com.bank.dto.response.PageResponse;
 import com.bank.exception.JwtAuthenticationException;
 import com.bank.exception.NotBalanceException;
 import com.bank.mapper.CardMapper;
+import com.bank.mapper.CardTransactionMapper;
 import com.bank.model.Card;
+import com.bank.model.CardTransaction;
+import com.bank.model.enums.TypeTransaction;
 import com.bank.repo.CardRepo;
+import com.bank.repo.CardTransactionRepo;
 import com.bank.service.CardService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CardServiceImpl implements CardService {
 
     private final CardRepo cardRepo;
+    private final CardTransactionRepo cardTransactionRepo;
     private final AuthServiceImpl authService;
     private final CardMapper cardMapper;
+    private final CardTransactionMapper cardTransactionMapper;
 
     @Override
     public CardResponse getBalance(String token) {
@@ -30,6 +40,7 @@ public class CardServiceImpl implements CardService {
     public CardResponse addMoney(String token, Double money) {
         Card currentCard = authService.getCurrentCard(token);
         currentCard.setBalance(currentCard.getBalance() + money);
+        addTransaction(currentCard, money, TypeTransaction.ADD_MONEY);
         return cardMapper.toDtoResponse(cardRepo.save(currentCard));
     }
 
@@ -38,6 +49,7 @@ public class CardServiceImpl implements CardService {
         Card currentCard = authService.getCurrentCard(token);
         Double currentBalance = subtractMoney(currentCard, money);
         currentCard.setBalance(currentBalance);
+        addTransaction(currentCard, money, TypeTransaction.WITHDRAW_MONEY);
         return cardMapper.toDtoResponse(cardRepo.save(currentCard));
     }
 
@@ -51,7 +63,24 @@ public class CardServiceImpl implements CardService {
         myCard.setBalance(myBalance);
         Double anotherBalance = addMoney(anotherCard, money);
         anotherCard.setBalance(anotherBalance);
+        addTransaction(myCard, money, TypeTransaction.GET_MONEY);
+        addTransaction(anotherCard, money, TypeTransaction.ADD_MONEY);
         return cardMapper.toDtoResponse(myCard);
+    }
+
+    @Override
+    public PageResponse<CardTransactionResponse> getCartTransaction(String token, Pageable pageable) {
+        Card currentCard = authService.getCurrentCard(token);
+        Page<CardTransaction> pageCardTransaction = cardTransactionRepo.findAllByCard_Id(currentCard.getId(), pageable);
+        return cardTransactionMapper.toDtoPageResponse(pageCardTransaction);
+    }
+
+    private void addTransaction(Card card, Double money, TypeTransaction typeTransaction) {
+        CardTransaction cardTransaction = new CardTransaction();
+        cardTransaction.setCard(card);
+        cardTransaction.setMoney(money);
+        cardTransaction.setTypeTransaction(typeTransaction);
+        cardTransactionRepo.save(cardTransaction);
     }
 
     private Double addMoney(Card currentCard, Double money) {

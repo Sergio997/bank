@@ -9,6 +9,7 @@ import com.bank.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +36,7 @@ public class AuthController {
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(path = "/registration", method = RequestMethod.POST)
-    public void registration(@RequestBody CardRequest request) {
+    public void registration(@RequestBody @Validated CardRequest request) {
         authService.registerNewUserAccount(request);
     }
 
