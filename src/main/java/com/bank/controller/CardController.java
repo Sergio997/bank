@@ -4,7 +4,7 @@ import com.bank.dto.response.CardResponse;
 import com.bank.dto.response.CardTransactionResponse;
 import com.bank.dto.response.PageResponse;
 import com.bank.service.CardService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -16,14 +16,14 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("card")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CardController {
 
     private final CardService cardService;
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(path = "/balance", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public CardResponse confirmToken(HttpServletRequest request) {
+    public CardResponse showBalance(HttpServletRequest request) {
         String token = request.getHeader("Authorization").replace("Bearer ", "");
         return cardService.getBalance(token);
     }
@@ -42,7 +42,6 @@ public class CardController {
         return cardService.withdrawFunds(token, money);
     }
 
-    // TODO: 05.12.20 валідація, Junit, constantClass
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(path = "/withdraw/another/card/money", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public CardResponse addBalanceAnotherCardThroughMyCard(HttpServletRequest request, @RequestParam String card, @RequestParam Double money) {

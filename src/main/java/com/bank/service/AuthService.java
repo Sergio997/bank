@@ -18,8 +18,6 @@ public interface AuthService {
 
     CardResponse registerNewUserAccount(CardRequest request);
 
-    CardResponse getPerson(String verificationToken);
-
     void createVerificationToken(Card card, String token);
 
     VerificationToken getVerificationToken(String VerificationToken);

@@ -3,7 +3,6 @@ package com.bank.service.impl;
 import com.bank.dto.response.CardResponse;
 import com.bank.dto.response.CardTransactionResponse;
 import com.bank.dto.response.PageResponse;
-import com.bank.exception.JwtAuthenticationException;
 import com.bank.exception.NotBalanceException;
 import com.bank.mapper.CardMapper;
 import com.bank.mapper.CardTransactionMapper;
@@ -16,7 +15,7 @@ import com.bank.service.CardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -57,7 +56,7 @@ public class CardServiceImpl implements CardService {
     @Transactional
     public CardResponse addBalanceAnotherCardThroughMyCard(String token, String cardNumber, Double money) {
         Card anotherCard = cardRepo.findByNumberCard(cardNumber)
-                .orElseThrow(() -> new JwtAuthenticationException("JWT is expired or invalid", HttpStatus.UNAUTHORIZED));
+                .orElseThrow(() -> new UsernameNotFoundException("Card not found"));
         Card myCard = authService.getCurrentCard(token);
         Double myBalance = subtractMoney(myCard, money);
         myCard.setBalance(myBalance);
@@ -79,6 +78,7 @@ public class CardServiceImpl implements CardService {
         CardTransaction cardTransaction = new CardTransaction();
         cardTransaction.setCard(card);
         cardTransaction.setMoney(money);
+        cardTransaction.setBalance(card.getBalance());
         cardTransaction.setTypeTransaction(typeTransaction);
         cardTransactionRepo.save(cardTransaction);
     }
@@ -92,6 +92,6 @@ public class CardServiceImpl implements CardService {
         if (balance >= money) {
             return balance - money;
         }
-        throw new NotBalanceException("User not found exception. Please sign in first.");
+        throw new NotBalanceException("User dont have money.");
     }
 }

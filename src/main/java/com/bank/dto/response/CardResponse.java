@@ -12,7 +12,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CardResponse {
-
     private String numberCard;
     private Double balance;
 

@@ -1,13 +1,20 @@
 package com.bank.model;
 
-import com.bank.model.enums.Role;
 import com.bank.model.enums.TypeTransaction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
+import javax.persistence.ManyToOne;
+import javax.persistence.FetchType;
+import javax.persistence.CascadeType;
+import javax.persistence.JoinColumn;
 import java.util.Objects;
 
 @Entity
@@ -18,10 +25,10 @@ import java.util.Objects;
 @AllArgsConstructor
 public class CardTransaction extends AbstractEntity{
 
-    @Column(name = "current_balance")
-    private Double currentBalance;
     @Column(name = "money")
     private Double money;
+    @Column(name = "balance")
+    private Double balance;
     @Column(name = "type_transaction")
     @Enumerated(value = EnumType.STRING)
     private TypeTransaction typeTransaction;
@@ -36,22 +43,22 @@ public class CardTransaction extends AbstractEntity{
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         CardTransaction that = (CardTransaction) o;
-        return Objects.equals(currentBalance, that.currentBalance)
-                && Objects.equals(money, that.money)
+        return Objects.equals(money, that.money)
+                && Objects.equals(balance, that.balance)
                 && typeTransaction == that.typeTransaction
                 && Objects.equals(card, that.card);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), currentBalance, money, typeTransaction, card);
+        return Objects.hash(super.hashCode(), money, balance, typeTransaction, card);
     }
 
     @Override
     public String toString() {
         return "CardTransaction{" +
-                "currentBalance=" + currentBalance +
-                ", money=" + money +
+                "money=" + money +
+                ", balance=" + balance +
                 ", typeTransaction=" + typeTransaction +
                 ", card=" + card +
                 '}';

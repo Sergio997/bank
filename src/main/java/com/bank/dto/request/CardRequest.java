@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Objects;
@@ -14,14 +15,17 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CardRequest {
-
     @NotBlank(message = "numberCard can not be empty!")
     @Pattern(regexp = "^([0-9]{16})$",
             message = "Wrong pattern for email!")
     private String numberCard;
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "Invalid first name (minimum of 2 characters, letters only)")
     private String firstName;
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "Invalid first name (minimum of 2 characters, letters only)")
     private String secondName;
+    @NotBlank
     private String password;
+    @Email
     private String email;
 
     @Override

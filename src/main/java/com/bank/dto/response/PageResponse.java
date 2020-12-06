@@ -14,7 +14,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PageResponse<T> implements Serializable {
-
     private Integer totalPages;
     private Long totalElements;
     private List<T> data;

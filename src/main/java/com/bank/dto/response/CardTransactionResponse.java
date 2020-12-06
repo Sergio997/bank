@@ -16,8 +16,6 @@ import java.util.Objects;
 public class CardTransactionResponse {
 
     private LocalDateTime createDate;
-    private LocalDateTime updateDate;
-    private Double currentBalance;
     private Double money;
     private TypeTransaction typeTransaction;
     private CardResponse card;
@@ -27,20 +25,21 @@ public class CardTransactionResponse {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CardTransactionResponse that = (CardTransactionResponse) o;
-        return Objects.equals(createDate, that.createDate) && Objects.equals(updateDate, that.updateDate) && Objects.equals(currentBalance, that.currentBalance) && Objects.equals(money, that.money) && typeTransaction == that.typeTransaction && Objects.equals(card, that.card);
+        return Objects.equals(createDate, that.createDate)
+                && Objects.equals(money, that.money)
+                && typeTransaction == that.typeTransaction
+                && Objects.equals(card, that.card);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(createDate, updateDate, currentBalance, money, typeTransaction, card);
+        return Objects.hash(createDate, money, typeTransaction, card);
     }
 
     @Override
     public String toString() {
         return "CardTransactionResponse{" +
                 "createDate=" + createDate +
-                ", updateDate=" + updateDate +
-                ", currentBalance=" + currentBalance +
                 ", money=" + money +
                 ", typeTransaction=" + typeTransaction +
                 ", card=" + card +

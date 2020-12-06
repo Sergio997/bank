@@ -6,18 +6,24 @@ import com.bank.dto.response.AuthenticationResponse;
 import com.bank.dto.response.CardResponse;
 import com.bank.model.Card;
 import com.bank.service.AuthService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("bank/auth")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
@@ -48,8 +54,8 @@ public class AuthController {
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(path = "/forgot-password", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void forgotPassword(@RequestParam String email) {
-        authService.forgotPassword(email);
+    public void forgotPassword(@RequestParam String card) {
+        authService.forgotPassword(card);
     }
 
     @ResponseStatus(HttpStatus.OK)

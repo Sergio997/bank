@@ -1,5 +1,6 @@
 package com.bank.config;
 
+import com.bank.util.Constant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,14 +22,10 @@ public class MailConfig {
     private int port;
     @Value("${spring.mail.debug}")
     private String debug;
-    private final int timeout = 5000;
-    private final int writeTimeout = 5000;
-    private final int connectionTimeout = 5000;
     @Value("${spring.mail.transport.protocol}")
     private String protocol;
     @Value("${spring.mail.smtp.auth}")
     private String auth;
-    private final String starttlsEnable = "true";
 
 
     @Bean
@@ -41,13 +38,13 @@ public class MailConfig {
         mailSender.setPassword(password);
 
         Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", protocol);
-        props.put("mail.smtp.auth", auth);
-        props.put("mail.smtp.starttls.enable", starttlsEnable);
-        props.put("mail.debug", debug);
-        props.put("mail.properties.mail.smtp.timeout", timeout);
-        props.put("mail.properties.mail.smtp.writetimeout", writeTimeout);
-        props.put("mail.properties.mail.smtp.connectiontimeout", connectionTimeout);
+        props.put(Constant.Mail.MAIL_TRANSPORT_PROTOCOL, protocol);
+        props.put(Constant.Mail.MAIL_SMTP_AUTH, auth);
+        props.put(Constant.Mail.MAIL_SMTP_STARTTLS, Constant.Mail.STARTTLS_ENABLE);
+        props.put(Constant.Mail.MAIL_DEBUG, debug);
+        props.put(Constant.Mail.MAIL_TIMEOUT, Constant.Mail.TIMEOUT);
+        props.put(Constant.Mail.MAIL_WRITE_TIMEOUT, Constant.Mail.WRITE_TIMEOUT);
+        props.put(Constant.Mail.MAIL_CONNECTION_TIMEOUT, Constant.Mail.CONNECTION_TIMEOUT);
 
         return mailSender;
     }
